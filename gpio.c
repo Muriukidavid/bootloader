@@ -1,9 +1,14 @@
 #include "gpio.h"
 //configure RED LED
-void init_led(void){
+void init_RED_LED(void){
 	PORTB_PCR18 |= PORT_PCR_MUX(1);//alt1=gpio pin
 	PTB_BASE_PTR->PDDR |= (uint32_t)(1<<18);//as an output
 	PTB_BASE_PTR->PDOR &= ~(uint32_t)(1<<18);
+}
+
+void blink_RED_LED(void){
+	PTB_BASE_PTR->PTOR = 1 << 18;//toggle output
+	delay();
 }
 
 //delay

@@ -3,41 +3,20 @@
 * David Muriuki Karibe
 *
 * Licence: check LICENCE file
-* July 2016
+* Created July 2016
+* Last updated January 2017
 */
-#include "gpio.h"
-#include "uart.h"
-
-#define disable_irq(void) __asm__("CPSID i")
-#define enable_irq(void) __asm__("CPSIE i")
-
-extern void init_clocks(void);
-
-uint8_t data_available, data;
+#include"main.h"
 
 void main(void){
-	data_available = 0;
-	data = 0;
-	disable_irq();
-	init_clocks();
-	init_led();
-	init_uart0();
-	enable_irq();
-	while(1){
-		PTB_BASE_PTR->PTOR = 1 << 18;//toggle output
-		delay();
-		if(data_available){
-			data_available=0;
-			uart_putchar(data);
-		}
+	uint8_t test[1]={'\0'};
+
+	init_system(); //initialize the KIT
+	while(1){ //loop forever
+		blink_RED_LED();
+		uart_read(test,1);
+		uart_write(test,1);
+		uart_write('\r',1);
+		uart_write('\n',1);
 	}
 }
-
-
-
-
-
-
-
-
-
